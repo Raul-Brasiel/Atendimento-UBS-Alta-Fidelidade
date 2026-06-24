@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Agendamentos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/global.css">
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Modal Animation */
+        .modal-enter { animation: modalEnter 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes modalEnter {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .status-badge {
+            transition: all 0.2s;
+        }
+        .card-hover {
+            transition: all 0.3s;
+        }
+        .card-hover:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <header class="bg-white border-b py-4 px-6 shadow-sm sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="font-bold text-2xl text-gray-700">
+                <span class="text-blue-700">gov.br</span> <span class="font-light text-gray-400">|</span> <span class="font-normal text-gray-600">Saúde</span>
+            </div>
+            <a href="pagina_paciente.html" class="text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-full transition-colors flex items-center gap-2 font-medium">
+                <i class="fas fa-arrow-left"></i> Voltar ao Início
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow py-10 px-4">
+        <div class="max-w-4xl mx-auto relative">
+            
+            <!-- TELA LISTA -->
+            <div id="tela-lista" class="fade-in">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+                            <div class="p-3 bg-blue-100 text-blue-700 rounded-xl">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            Meus Agendamentos
+                        </h1>
+                        <p class="text-gray-500 mt-2 ml-14">Acompanhe suas consultas e histórico</p>
+                    </div>
+                    <button onclick="mostrarFormulario()" class="bg-blue-700 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-800 hover:shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Novo Agendamento
+                    </button>
+                </div>
+
+                <div class="space-y-5" id="lista-container">
+                    <!-- Item Mockado 1: Agendado -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-blue-500 card-hover relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -mr-10 -mt-10 z-0"></div>
+                        <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="font-bold text-xl text-gray-800">Clínica Geral</h3>
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-blue-100 text-blue-800 status-badge">Agendado</span>
+                                </div>
+                                <p class="text-gray-600 flex items-center gap-2 mb-1">
+                                    <i class="fas fa-hospital w-5 text-center text-blue-500"></i> UBS Central
+                                </p>
+                                <p class="text-gray-600 flex items-center gap-2 font-medium">
+                                    <i class="fas fa-calendar-alt w-5 text-center text-blue-500"></i> Amanhã, às 09:30
+                                </p>
+                            </div>
+                            <button onclick="cancelarAgendamento(this)" class="text-red-500 hover:text-red-700 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 border border-transparent hover:border-red-100">
+                                <i class="fas fa-times-circle"></i> Cancelar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Item Mockado 2: Finalizado -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-gray-300 card-hover opacity-80">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="font-bold text-xl text-gray-800">Vacinação</h3>
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-gray-100 text-gray-600">Finalizado</span>
+                                </div>
+                                <p class="text-gray-600 flex items-center gap-2 mb-1">
+                                    <i class="fas fa-hospital w-5 text-center text-gray-400"></i> UBS Vila Nova
+                                </p>
+                                <p class="text-gray-500 flex items-center gap-2">
+                                    <i class="fas fa-calendar-check w-5 text-center text-gray-400"></i> 15/05/2026 às 14:00
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="bg-gray-50 p-3 rounded-lg text-gray-600 text-sm">
+                                <strong class="text-gray-700"><i class="fas fa-syringe mr-1"></i> Detalhes:</strong> Vacina da Gripe (Influenza) aplicada com sucesso.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TELA FORMULÁRIO -->
+            <div id="tela-formulario" class="hidden">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <div class="flex justify-between items-center mb-8 border-b border-gray-100 pb-4">
+                        <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                            <div class="p-2 bg-blue-50 text-blue-700 rounded-lg">
+                                <i class="fas fa-calendar-plus"></i>
+                            </div>
+                            Nova Solicitação
+                        </h1>
+                        <button type="button" onclick="mostrarLista()" class="text-gray-400 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2">
+                            <i class="fas fa-times"></i> Fechar
+                        </button>
+                    </div>
+                    
+                    <form id="formAgendamento" onsubmit="simularAgendamento(event)">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2 text-sm">Unidade de Saúde</label>
+                                <select required class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors outline-none text-gray-700 cursor-pointer">
+                                    <option value="" disabled selected>Selecione a unidade mais próxima...</option>
+                                    <option>UBS Central</option>
+                                    <option>UBS Vila Nova</option>
+                                    <option>Posto de Saúde Norte</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2 text-sm">Especialidade / Tipo</label>
+                                <select required class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors outline-none text-gray-700 cursor-pointer">
+                                    <option value="" disabled selected>O que você precisa?</option>
+                                    <option>Clínica Geral</option>
+                                    <option>Odontologia</option>
+                                    <option>Vacinação</option>
+                                    <option>Psicologia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2 text-sm">Preferência de Data</label>
+                                <input type="date" required class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors outline-none text-gray-700">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2 text-sm">Período</label>
+                                <select required class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors outline-none text-gray-700 cursor-pointer">
+                                    <option value="" disabled selected>Selecione o turno...</option>
+                                    <option>Manhã (07h - 12h)</option>
+                                    <option>Tarde (13h - 18h)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-8 p-5 bg-blue-50/50 rounded-xl border border-blue-100">
+                            <span class="block text-gray-700 font-semibold mb-3 text-sm">Necessidades Especiais ou Preferenciais</span>
+                            <div class="flex flex-wrap gap-4 mb-3">
+                                <label class="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors">
+                                    <input type="radio" name="necessidade" value="nao" checked class="w-4 h-4 text-blue-600 focus:ring-blue-500" onclick="toggleDoenca(false)"> 
+                                    <span class="text-sm font-medium">Nenhuma</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors">
+                                    <input type="radio" name="necessidade" value="sim" class="w-4 h-4 text-blue-600 focus:ring-blue-500" onclick="toggleDoenca(true)"> 
+                                    <span class="text-sm font-medium">Doença Crônica / PCD</span>
+                                </label>
+                            </div>
+                            <div id="campo_qual_doenca" class="hidden mt-3 fade-in">
+                                <input type="text" id="input_doenca" placeholder="Descreva brevemente (opcional)" class="w-full p-3 border border-gray-300 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors outline-none text-sm">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                            <button type="button" onclick="mostrarLista()" class="px-6 py-3 font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">Cancelar</button>
+                            <button type="submit" class="px-8 py-3 bg-blue-700 text-white font-bold rounded-xl hover:bg-blue-800 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                                <i class="fas fa-check"></i> Confirmar Agendamento
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Modal de Sucesso (Mock) -->
+            <div id="modal-sucesso" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+                <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center shadow-2xl modal-enter">
+                    <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-check text-4xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Agendamento Solicitado!</h2>
+                    <p class="text-gray-600 mb-8">Sua solicitação foi enviada para a unidade. Acompanhe o status pela lista.</p>
+                    <button onclick="fecharModal()" class="w-full py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition-colors shadow-md">
+                        Entendi
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <script>
+        function mostrarFormulario() { 
+            const lista = document.getElementById('tela-lista');
+            const form = document.getElementById('tela-formulario');
+            
+            lista.classList.add('hidden'); 
+            lista.classList.remove('fade-in');
+            
+            form.classList.remove('hidden'); 
+            form.classList.add('fade-in');
+        }
+        
+        function mostrarLista() { 
+            const lista = document.getElementById('tela-lista');
+            const form = document.getElementById('tela-formulario');
+            
+            form.classList.add('hidden'); 
+            form.classList.remove('fade-in');
+            
+            lista.classList.remove('hidden'); 
+            lista.classList.add('fade-in');
+        }
+        
+        function toggleDoenca(temDoenca) {
+            const campo = document.getElementById('campo_qual_doenca');
+            if (temDoenca) { 
+                campo.classList.remove('hidden'); 
+            } else { 
+                campo.classList.add('hidden'); 
+            }
+        }
+        
+        function simularAgendamento(e) {
+            e.preventDefault();
+            document.getElementById('modal-sucesso').classList.remove('hidden');
+        }
+        
+        function fecharModal() {
+            document.getElementById('modal-sucesso').classList.add('hidden');
+            // Mock adding an item to the list
+            adicionarItemMock();
+            mostrarLista();
+            document.getElementById('formAgendamento').reset();
+        }
+        
+        function cancelarAgendamento(btn) {
+            if(confirm('Tem certeza que deseja cancelar este agendamento?')) {
+                const card = btn.closest('.bg-white');
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.95)';
+                setTimeout(() => { card.remove(); }, 300);
+            }
+        }
+        
+        function adicionarItemMock() {
+            const container = document.getElementById('lista-container');
+            const selects = document.querySelectorAll('select');
+            const tipo = selects[1].value || 'Clínica Geral';
+            const ubs = selects[0].value || 'UBS Selecionada';
+            
+            const novoCard = document.createElement('div');
+            novoCard.className = "bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-yellow-400 card-hover relative overflow-hidden fade-in";
+            novoCard.innerHTML = `
+                <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-50 rounded-bl-full -mr-10 -mt-10 z-0"></div>
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h3 class="font-bold text-xl text-gray-800">${tipo}</h3>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-yellow-100 text-yellow-800">Aguardando Confirmação</span>
+                        </div>
+                        <p class="text-gray-600 flex items-center gap-2 mb-1">
+                            <i class="fas fa-hospital w-5 text-center text-yellow-500"></i> ${ubs}
+                        </p>
+                        <p class="text-gray-600 flex items-center gap-2 font-medium">
+                            <i class="fas fa-calendar-alt w-5 text-center text-yellow-500"></i> Em análise
+                        </p>
+                    </div>
+                    <button onclick="cancelarAgendamento(this)" class="text-red-500 hover:text-red-700 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 border border-transparent hover:border-red-100">
+                        <i class="fas fa-times-circle"></i> Cancelar
+                    </button>
+                </div>
+            `;
+            container.insertBefore(novoCard, container.firstChild);
+        }
+    </script>
+</body>
+</html>

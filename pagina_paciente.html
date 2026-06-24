@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Paciente - Gov.br Saúde</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/global.css">
+    <link rel="stylesheet" href="CSS/dashboard.css">
+    <style>
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .service-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .icon-container {
+            transition: transform 0.3s ease;
+        }
+        .service-card:hover .icon-container {
+            transform: scale(1.1);
+        }
+        .carousel-item {
+            transition: opacity 0.5s ease-in-out;
+        }
+        .dot.active {
+            background-color: #1d4ed8; /* blue-700 */
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <header class="bg-white border-b border-gray-200 py-4 px-4 lg:px-8 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="font-bold text-2xl text-gray-700 select-none">
+                <span class="text-blue-700">gov.br</span> <span class="font-light text-gray-400">|</span> <span class="font-normal text-gray-600">Saúde</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="hidden md:block text-sm text-gray-600">Olá, <strong class="text-gray-800">João da Silva</strong></span>
+                <div class="h-10 w-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold border border-blue-200 text-sm shadow-inner cursor-pointer hover:bg-blue-200 transition-colors">
+                    JS
+                </div>
+                <a href="login.html" class="text-sm text-red-500 font-semibold hover:text-red-700 hover:underline ml-2 transition-colors">Sair</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow fade-in">
+        <!-- Carrossel -->
+        <section class="w-full bg-white mb-10 py-8 border-b border-gray-100">
+            <div class="max-w-5xl mx-auto relative px-4">
+                <!-- Slide 1 -->
+                <div class="carousel-item active w-full h-64 md:h-80 relative overflow-hidden rounded-2xl shadow-lg bg-[#dbe830]">
+                    <img src="imagens/campanha_vascinacao.png" alt="Vacinação" class="w-full h-full object-contain hover:scale-105 transition-transform duration-700">
+                </div>
+                <!-- Slide 2 -->
+                <div class="carousel-item w-full h-64 md:h-80 relative overflow-hidden rounded-2xl shadow-lg" style="display: none;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-blue-700 flex items-center justify-center">
+                        <div class="text-center text-white px-4">
+                            <i class="fas fa-mosquito mb-4 text-5xl opacity-80"></i>
+                            <h2 class="text-4xl font-bold mb-3">COMBATE À DENGUE</h2>
+                            <p class="mb-6 text-blue-100 max-w-lg mx-auto">Saiba como proteger sua família e eliminar os focos do mosquito.</p>
+                            <button class="border-2 border-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-blue-800 transition-all shadow-md">Ver orientações</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="carousel-item w-full h-64 md:h-80 relative overflow-hidden rounded-2xl shadow-lg" style="display: none;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-green-600 to-teal-500 flex items-center justify-center">
+                        <div class="text-center text-white px-4">
+                            <i class="fas fa-calendar-check mb-4 text-5xl opacity-80"></i>
+                            <h2 class="text-4xl font-bold mb-3">AGENDAMENTO ONLINE</h2>
+                            <p class="mb-6 text-green-50 max-w-lg mx-auto">Agende suas consultas e exames sem sair de casa, de forma rápida e segura.</p>
+                            <a href="agendamento.html" class="inline-block bg-white text-green-700 px-8 py-3 rounded-full font-bold hover:bg-gray-50 hover:shadow-lg transition-all transform hover:-translate-y-1">Agendar agora</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Navegação -->
+                <div class="absolute bottom-4 w-full text-center z-20 flex justify-center gap-2">
+                    <span class="dot active w-3 h-3 rounded-full bg-gray-300 cursor-pointer hover:bg-gray-400 transition-colors" onclick="currentSlide(1)"></span>
+                    <span class="dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer hover:bg-gray-400 transition-colors" onclick="currentSlide(2)"></span>
+                    <span class="dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer hover:bg-gray-400 transition-colors" onclick="currentSlide(3)"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grid de Serviços -->
+        <section class="max-w-7xl mx-auto px-4 pb-20">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-extrabold text-gray-800 mb-2 tracking-tight">Serviços Disponíveis</h2>
+                <p class="text-gray-500">Selecione o serviço que você deseja acessar</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Card Agendamento -->
+                <a href="agendamento.html" class="service-card bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center justify-center cursor-pointer group h-64 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                    <div class="icon-container text-blue-600 text-5xl mb-6">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg mb-2 group-hover:text-blue-700 transition-colors">Agendamentos</h3>
+                    <p class="text-sm text-gray-500">Marque novas consultas</p>
+                </a>
+
+                <!-- Card Fila -->
+                <a href="fila_atendimento.html" class="service-card bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center justify-center cursor-pointer group h-64 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                    <div class="icon-container text-green-600 text-5xl mb-6">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg mb-2 group-hover:text-green-700 transition-colors">Painel Público</h3>
+                    <p class="text-sm text-gray-500">Acompanhe a fila online</p>
+                </a>
+
+                <!-- Card Exames (Mock) -->
+                <a href="#" class="service-card bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center justify-center cursor-pointer group h-64 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                    <div class="icon-container text-purple-600 text-5xl mb-6">
+                        <i class="fas fa-file-medical-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg mb-2 group-hover:text-purple-700 transition-colors">Meus Exames</h3>
+                    <p class="text-sm text-gray-500">Resultados e laudos</p>
+                </a>
+
+                <!-- Card Receitas (Mock) -->
+                <a href="#" class="service-card bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center justify-center cursor-pointer group h-64 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-red-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                    <div class="icon-container text-red-600 text-5xl mb-6">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-lg mb-2 group-hover:text-red-700 transition-colors">Receitas Médicas</h3>
+                    <p class="text-sm text-gray-500">Prescrições ativas</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let slideIndex = 0;
+        let slideInterval;
+        
+        showSlides();
+        
+        function showSlides() {
+            let i;
+            let slides = document.getElementsByClassName("carousel-item");
+            let dots = document.getElementsByClassName("dot");
+            if (slides.length === 0) return;
+            for (i = 0; i < slides.length; i++) { 
+                slides[i].style.display = "none"; 
+                slides[i].classList.remove("active"); 
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}    
+            for (i = 0; i < dots.length; i++) { 
+                dots[i].className = dots[i].className.replace(" active", ""); 
+                dots[i].style.backgroundColor = "";
+            }
+            
+            // Effect transition
+            slides[slideIndex-1].style.opacity = "0";
+            slides[slideIndex-1].style.display = "block";  
+            setTimeout(() => { slides[slideIndex-1].style.opacity = "1"; }, 50);
+            
+            slides[slideIndex-1].classList.add("active");
+            dots[slideIndex-1].className += " active";
+            dots[slideIndex-1].style.backgroundColor = "#1d4ed8";
+            
+            clearTimeout(slideInterval);
+            slideInterval = setTimeout(showSlides, 5000); 
+        }
+        
+        function currentSlide(n) { 
+            slideIndex = n - 1; 
+            clearTimeout(slideInterval);
+            showSlides();
+        }
+    </script>
+</body>
+</html>
